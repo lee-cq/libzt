@@ -8,7 +8,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [windows-latest]
 
     steps:
       - uses: actions/checkout@v2
@@ -32,7 +32,7 @@ jobs:
         shell: bash
         run: |
           echo Install Swig.
-          curl -O https://nchc.dl.sourceforge.net/project/swig/swigwin/swigwin-4.1.1/swigwin-4.1.1.zip
+          curl -kiLO  https://nchc.dl.sourceforge.net/project/swig/swigwin/swigwin-4.1.1/swigwin-4.1.1.zip
           unzip swigwin-4.1.1.zip && cp swigwin-4.1.1/swig.exe /usr/bin
       
       - name: Install poetry
