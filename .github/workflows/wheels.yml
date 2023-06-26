@@ -8,7 +8,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
 
     steps:
       - uses: actions/checkout@v2
@@ -22,19 +22,30 @@ jobs:
       - name: Install Swig (ubuntu-latest)
         if: matrix.os == 'ubuntu-latest'
         run: sudo apt-get install swig
+      
+      - name: Install Swig (windows-latest)
+        if: matrix.os == 'windows-latset'
+        shell: bash
+        run: |
+          echo Install Swig.
+          curl -O https://nchc.dl.sourceforge.net/project/swig/swigwin/swigwin-4.1.1/swigwin-4.1.1.zip
+          unzip swigwin-4.1.1.zip && cp swigwin-4.1.1/swig.exe /usr/bin
 
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-python@v4
       
       - name: Install poetry
+        shell: bash
         run: python -m pip install poetry==1.1.12
 
       - name: Install cibuildwheel
+        shell: bash
         run: python -m pip install cibuildwheel==2.5.0
 
       - name: Build wheels
+        shell: bash
         env:
           CIBW_ARCHS: auto
-          CIBW_BUILD: cp36-* cp37-* cp38-* cp39-* cp310-*
+          CIBW_BUILD: cp36-* cp37-* cp38-* cp39-* cp310-* cp311-*
         run: python -m cibuildwheel pkg/pypi --output-dir wheelhouse
 
       - uses: actions/upload-artifact@v2
