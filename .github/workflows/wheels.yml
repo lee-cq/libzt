@@ -14,6 +14,10 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: recursive
+        
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
 
       - name: Install Swig (macos-latest)
         if: matrix.os == 'macos-latest'
@@ -24,14 +28,12 @@ jobs:
         run: sudo apt-get install swig
       
       - name: Install Swig (windows-latest)
-        if: matrix.os == 'windows-latset'
+        if: matrix.os == 'windows-latest'
         shell: bash
         run: |
           echo Install Swig.
           curl -O https://nchc.dl.sourceforge.net/project/swig/swigwin/swigwin-4.1.1/swigwin-4.1.1.zip
           unzip swigwin-4.1.1.zip && cp swigwin-4.1.1/swig.exe /usr/bin
-
-      - uses: actions/setup-python@v4
       
       - name: Install poetry
         shell: bash
@@ -45,7 +47,7 @@ jobs:
         shell: bash
         env:
           CIBW_ARCHS: auto
-          CIBW_BUILD: cp36-* cp37-* cp38-* cp39-* cp310-* cp311-*
+          CIBW_BUILD: cp310-*
         run: python -m cibuildwheel pkg/pypi --output-dir wheelhouse
 
       - uses: actions/upload-artifact@v2
